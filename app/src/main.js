@@ -7,8 +7,12 @@ Vue.config.productionTip = false
 
 import axios from 'axios';
 Vue.prototype.$server = axios.create({
-  baseURL: 'http://localhost:9000/api/',
+  baseURL: 'http://localhost:9000',
   timeout: 3000,
+  withCredentials: true,
+  headers: {
+    'Accept': 'application/json'
+  }
 });
 
 new Vue({
