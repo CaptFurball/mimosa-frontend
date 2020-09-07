@@ -17,7 +17,7 @@
                             required>
                         </v-text-field>
 
-                        <v-btn block v-on:click="login()">
+                        <v-btn block :disabled="loginBtnDisabled" v-on:click="login()">
                             Login
                         </v-btn>
                     </v-form>
@@ -26,8 +26,7 @@
            
             <v-snackbar
                 v-model="snackbar"
-                :timeout="snackbarTimeout"
-                >
+                :timeout="snackbarTimeout">
                 {{ snackbarText }}
 
                 <template v-slot:action="{ attrs }">
@@ -46,31 +45,41 @@
 
 <script>
 export default {
-    data () {
-        return {
-            email: null,
-            password: null,
-            snackbarTimeout: 2000,
-            snackbar: false,
-            snackbarText: ''
-        };
+    data: () => ({
+        email: null,
+        password: null,
+        loginBtnDisabled: false,
+        snackbarTimeout: 2000,
+        snackbar: false,
+        snackbarText: ''
+    }),
+    mounted () {
+        console.log(this.$store.state.authenticated);
+        console.log(this.$store.state.user.name);
     },
     methods: {
         login: function () {
+            this.loginBtnDisabled = true;
+
             this.$server.post('login', {
                 email: this.email,
                 password: this.password
             }).then((resp) => {
                 if (resp.data.status === 'SUCCESS') {
-                    let user = resp.data.message.user;
+                    this.$store.dispatch('onSuccessLogin', resp.data.message.user);
 
-                    // use vuex to commit
+                    this.snackbar = true;
+                    this.snackbarText = 'Welcome back to Mimosa! Redirecting in 3s..';
+
+                    setTimeout(() => { this.$router.push('/') }, 3000);
                 } else if (resp.data.status === 'REJECTED') {
                     this.snackbar = true;
                     this.snackbarText = 'Invalid credentials';
+                    this.loginBtnDisabled = false;
                 } else {
                     this.snackbar = true;
                     this.snackbarText = 'Server error';
+                    this.loginBtnDisabled = false;
                 }
             }).catch(() => {
                 this.snackbar = true;
