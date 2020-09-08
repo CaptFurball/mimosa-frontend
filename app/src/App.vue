@@ -78,7 +78,8 @@
                     fab
                     dark
                     small
-                    color="orange">
+                    color="orange"
+                    @click="$router.push('/video')">
                     <v-icon>mdi-video</v-icon>
                 </v-btn>
 
@@ -86,7 +87,8 @@
                     fab
                     dark
                     small
-                    color="pink">
+                    color="pink"
+                    @click="$router.push('/link')">
                     <v-icon>mdi-link</v-icon>
                 </v-btn>
             </v-speed-dial>

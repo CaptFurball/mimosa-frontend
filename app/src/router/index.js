@@ -24,6 +24,30 @@ const routes = [
         path: '/photo',
         name: 'Photo',
         component: () => import('../components/forms/Photo.vue')
+    },
+    {
+        path: '/video',
+        name: 'Video',
+        component: () => import('../components/forms/Video.vue')
+    },
+    {
+        path: '/link',
+        name: 'Link',
+        component: () => import('../components/forms/Link.vue')
+    },
+    {
+        path: '/user/:id',
+        name: 'User',
+        component: () => import('../components/User.vue')
+    },
+    {
+        path: '/tag/:tag',
+        name: 'Tag',
+        component: () => import('../components/Tag.vue')
+    },
+    {
+        path: '*',
+        redirect: '/'
     }
 ]
 
