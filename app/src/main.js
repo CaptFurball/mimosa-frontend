@@ -4,10 +4,10 @@ import vuetify from './plugins/vuetify';
 import router from './router';
 
 Vue.config.productionTip = false
-
+console.log(process.env.VUE_APP_MIMOSA_BACKEND);
 import axios from 'axios';
 Vue.prototype.$server = axios.create({
-  baseURL: process.env.MIMOSA_BACKEND,
+  baseURL: process.env.VUE_APP_MIMOSA_BACKEND,
   timeout: 3000,
   withCredentials: true,
   headers: {
