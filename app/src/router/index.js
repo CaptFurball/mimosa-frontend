@@ -16,9 +16,9 @@ const routes = [
         component: () => import('../components/forms/Login.vue')
     },
     {
-        path: '/register',
-        name: 'Register',
-        component: () => import('../components/forms/Register.vue')
+        path: '/status',
+        name: 'Status',
+        component: () => import('../components/forms/Status.vue')
     }
 ]
 
