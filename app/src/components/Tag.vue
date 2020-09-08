@@ -18,8 +18,13 @@
         </v-container>
 
         <v-container v-if="$store.state.authenticated" class="fill-height" fluid>
-                        <v-row align="center" justify="center" v-for="story in stories" :key="story.id">
-                  <v-card
+            <v-row>
+                <v-col>
+                    <h2>Browse by tag: # {{$route.params.tag}}</h2>
+                </v-col>
+            </v-row>
+            <v-row align="center" justify="center" v-for="story in stories" :key="story.id">
+                <v-card
                     class="ma-2"
                     color="#26c6da"
                     min-width="95%"
@@ -81,6 +86,10 @@
                                 align="center"
                                 justify="end">
 
+                                <v-btn v-if="$store.state.user.id == story.user.id" icon v-on:click="deleteStory(story.id)">
+                                    <v-icon class="mr-1">mdi-trash-can</v-icon>
+                                </v-btn>
+                                <span v-if="$store.state.user.id == story.user.id" class="mr-1">·</span>
                                 <v-btn icon v-on:click="showComments(story)"><v-icon class="mr-1">mdi-comment</v-icon></v-btn>
                                 <span class="subheading mr-2">{{ story.comments.length }}</span>
                                 <span class="mr-1">·</span>
@@ -237,6 +246,18 @@ export default {
                 } else {
                     this.snackbar = true;
                     this.snackbarText = 'Can\'t like now, please try again later';
+                }
+            })
+        },
+        deleteStory(storyId) {
+            this.$server.delete('api/user/post/delete/' + storyId).then((resp) => {
+                if (resp.data.status === 'SUCCESS') {
+                    this.fetchStories();
+                    this.snackbar = true;
+                    this.snackbarText = 'You have deleted this story';
+                } else {
+                    this.snackbar = true;
+                    this.snackbarText = 'Can\'t delete now, please try again later';
                 }
             })
         }

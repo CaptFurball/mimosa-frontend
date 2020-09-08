@@ -81,6 +81,10 @@
                                 align="center"
                                 justify="end">
 
+                                <v-btn v-if="$store.state.user.id == story.user.id" icon v-on:click="deleteStory(story.id)">
+                                    <v-icon class="mr-1">mdi-trash-can</v-icon>
+                                </v-btn>
+                                <span v-if="$store.state.user.id == story.user.id" class="mr-1">·</span>
                                 <v-btn icon v-on:click="showComments(story)"><v-icon class="mr-1">mdi-comment</v-icon></v-btn>
                                 <span class="subheading mr-2">{{ story.comments.length }}</span>
                                 <span class="mr-1">·</span>
@@ -237,6 +241,18 @@ export default {
                 } else {
                     this.snackbar = true;
                     this.snackbarText = 'Can\'t like now, please try again later';
+                }
+            })
+        },
+        deleteStory(storyId) {
+            this.$server.delete('api/user/post/delete/' + storyId).then((resp) => {
+                if (resp.data.status === 'SUCCESS') {
+                    this.fetchStories();
+                    this.snackbar = true;
+                    this.snackbarText = 'You have deleted this story';
+                } else {
+                    this.snackbar = true;
+                    this.snackbarText = 'Can\'t delete now, please try again later';
                 }
             })
         }
