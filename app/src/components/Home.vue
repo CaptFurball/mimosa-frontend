@@ -34,7 +34,7 @@
 
                     <div v-if="!!story.photo">
                         <v-img
-                            :src="process.env.VUE_APP_MIMOSA_BACKEND_STORAGE + story.photo.path"
+                            :src="storageUrl + story.photo.path"
                             height="200px">
                         </v-img>
                     </div>
@@ -55,7 +55,7 @@
 
                     <div v-if="!!story.video">
                         <video width="100%" height="240" controls>
-                            <source :src="process.env.VUE_APP_MIMOSA_BACKEND_STORAGE + story.video.path">
+                            <source :src="storageUrl + story.video.path">
                             Your browser does not support the video tag.
                         </video>
                     </div>
@@ -162,7 +162,8 @@ export default {
         comment: null,
         snackbarTimeout: 2000,
         snackbar: false,
-        snackbarText: ''
+        snackbarText: '',
+        storageUrl: process.env.VUE_APP_MIMOSA_BACKEND_STORAGE
     }),
     mounted () {
         this.fetchStories();
