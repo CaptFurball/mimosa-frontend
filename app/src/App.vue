@@ -11,6 +11,24 @@
                     </v-list-item-content>
                 </v-list-item>
 
+                <v-list-item link v-on:click="$router.push('/popular')">
+                    <v-list-item-action>
+                        <v-icon>mdi-fire</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Popular</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
+                <v-list-item link v-on:click="$router.push('/discussed')">
+                    <v-list-item-action>
+                        <v-icon>mdi-chat</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Most Talked</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
                 <v-list-item v-if="$store.state.authenticated" link v-on:click="logout()">
                     <v-list-item-action>
                         <v-icon>mdi-logout-variant</v-icon>

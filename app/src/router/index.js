@@ -46,6 +46,16 @@ const routes = [
         component: () => import('../components/Tag.vue')
     },
     {
+        path: '/popular',
+        name: 'Popular',
+        component: () => import('../components/Popular.vue')
+    },
+    {
+        path: '/discussed',
+        name: 'Discussed',
+        component: () => import('../components/Discussed.vue')
+    },
+    {
         path: '*',
         redirect: '/'
     }
