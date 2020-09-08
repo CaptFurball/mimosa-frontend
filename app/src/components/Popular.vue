@@ -39,7 +39,7 @@
 
                     <div v-if="!!story.photo">
                         <v-img
-                            :src="'http://localhost:9000/storage/' + story.photo.path"
+                            :src="process.env.MIMOSA_BACKEND_STORAGE + story.photo.path"
                             height="200px">
                         </v-img>
                     </div>
@@ -60,7 +60,7 @@
 
                     <div v-if="!!story.video">
                         <video width="100%" height="240" controls>
-                            <source :src="'http://localhost:9000/storage/' + story.video.path">
+                            <source :src="process.env.MIMOSA_BACKEND_STORAGE + story.video.path">
                             Your browser does not support the video tag.
                         </video>
                     </div>

@@ -7,7 +7,7 @@ Vue.config.productionTip = false
 
 import axios from 'axios';
 Vue.prototype.$server = axios.create({
-  baseURL: 'http://localhost:9000',
+  baseURL: process.env.MIMOSA_BACKEND,
   timeout: 3000,
   withCredentials: true,
   headers: {
