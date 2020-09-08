@@ -16,9 +16,48 @@ const routes = [
         component: () => import('../components/forms/Login.vue')
     },
     {
-        path: '/register',
-        name: 'Register',
-        component: () => import('../components/forms/Register.vue')
+        path: '/status',
+        name: 'Status',
+        component: () => import('../components/forms/Status.vue')
+    },
+    {
+        path: '/photo',
+        name: 'Photo',
+        component: () => import('../components/forms/Photo.vue')
+    },
+    {
+        path: '/video',
+        name: 'Video',
+        component: () => import('../components/forms/Video.vue')
+    },
+    {
+        path: '/link',
+        name: 'Link',
+        component: () => import('../components/forms/Link.vue')
+    },
+    {
+        path: '/user/:id',
+        name: 'User',
+        component: () => import('../components/User.vue')
+    },
+    {
+        path: '/tag/:tag',
+        name: 'Tag',
+        component: () => import('../components/Tag.vue')
+    },
+    {
+        path: '/popular',
+        name: 'Popular',
+        component: () => import('../components/Popular.vue')
+    },
+    {
+        path: '/discussed',
+        name: 'Discussed',
+        component: () => import('../components/Discussed.vue')
+    },
+    {
+        path: '*',
+        redirect: '/'
     }
 ]
 

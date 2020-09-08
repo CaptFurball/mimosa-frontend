@@ -3,22 +3,24 @@
         <v-container>
             <v-row>
                 <v-col>
-                     <v-form ref="form">
+                    <v-form ref="form">
                         <v-text-field
-                            v-model="email"
-                            label="E-mail"
+                            v-model="status"
+                            label="Status"
                             required>
                         </v-text-field>
 
+                        <v-file-input @change="setPhoto" @clear="clearPhoto()" label="Photo"></v-file-input>
+                        <small>Please make sure image size is less than 1mb</small>
+
                         <v-text-field
-                            v-model="password"
-                            type="password"
-                            label="Password"
+                            v-model="tags"
+                            label="Tags (Comma seperate eg: 'startup,vimigo')"
                             required>
                         </v-text-field>
 
-                        <v-btn block :disabled="loginBtnDisabled" v-on:click="login()">
-                            Login
+                        <v-btn block :disabled="!status || !photo" v-on:click="postStatus()">
+                            Post
                         </v-btn>
                     </v-form>
                 </v-col>
@@ -46,31 +48,41 @@
 <script>
 export default {
     data: () => ({
-        email: null,
-        password: null,
-        loginBtnDisabled: false,
+        status: null,
+        photo: null,
+        tags: null,
         snackbarTimeout: 2000,
         snackbar: false,
         snackbarText: ''
     }),
     methods: {
-        login: function () {
-            this.loginBtnDisabled = true;
+        setPhoto(file) {
+            this.photo = file;
+        },
+        clearPhoto() {
+            this.photo = null;
+        },
+        postStatus: function () {
 
-            this.$server.post('login', {
-                email: this.email,
-                password: this.password
+            let formData = new FormData();
+            formData.append('body', this.status);
+            formData.append('photo', this.photo);
+            formData.append('tags', this.tags);
+
+            this.$server.post('api/user/post/photo', formData, {
+                headers: {'Content-Type': 'multipart/form-data'}
             }).then((resp) => {
                 if (resp.data.status === 'SUCCESS') {
-                    this.$store.dispatch('onSuccessLogin', resp.data.message.user);
+                    this.status = null;
+                    this.tags = null;
 
                     this.snackbar = true;
-                    this.snackbarText = 'Welcome back to Mimosa! Redirecting in 3s..';
+                    this.snackbarText = 'Photo post successful, redirecting to home in 3s...';
 
                     setTimeout(() => { this.$router.push('/') }, 3000);
                 } else if (resp.data.status === 'REJECTED') {
                     this.snackbar = true;
-                    this.snackbarText = 'Invalid credentials';
+                    this.snackbarText = 'Post reject, please check your form';
                     this.loginBtnDisabled = false;
                 } else {
                     this.snackbar = true;

@@ -18,8 +18,13 @@
         </v-container>
 
         <v-container v-if="$store.state.authenticated" class="fill-height" fluid>
+            <v-row>
+                <v-col>
+                    <h2>Browse by user</h2>
+                </v-col>
+            </v-row>
             <v-row align="center" justify="center" v-for="story in stories" :key="story.id">
-                  <v-card
+                <v-card
                     class="ma-2"
                     color="#26c6da"
                     min-width="95%"
@@ -179,7 +184,7 @@ export default {
             return likedFlag;
         },
         fetchStories() {
-            this.$server.get('api/story').then((resp) => {
+            this.$server.get('api/story/user/' + this.$route.params.id).then((resp) => {
                 if (resp.data.status === 'SUCCESS') {
                     this.stories = resp.data.message.stories;
                 } else {

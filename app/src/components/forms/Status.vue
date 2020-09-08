@@ -3,22 +3,21 @@
         <v-container>
             <v-row>
                 <v-col>
-                     <v-form ref="form">
+                    <v-form ref="form">
                         <v-text-field
-                            v-model="email"
-                            label="E-mail"
+                            v-model="status"
+                            label="Status"
                             required>
                         </v-text-field>
 
                         <v-text-field
-                            v-model="password"
-                            type="password"
-                            label="Password"
+                            v-model="tags"
+                            label="Tags (Comma seperate eg: 'startup,vimigo')"
                             required>
                         </v-text-field>
 
-                        <v-btn block :disabled="loginBtnDisabled" v-on:click="login()">
-                            Login
+                        <v-btn block :disabled="!status" v-on:click="postStatus()">
+                            Post
                         </v-btn>
                     </v-form>
                 </v-col>
@@ -46,31 +45,29 @@
 <script>
 export default {
     data: () => ({
-        email: null,
-        password: null,
-        loginBtnDisabled: false,
+        status: null,
+        tags: null,
         snackbarTimeout: 2000,
         snackbar: false,
         snackbarText: ''
     }),
     methods: {
-        login: function () {
-            this.loginBtnDisabled = true;
-
-            this.$server.post('login', {
-                email: this.email,
-                password: this.password
+        postStatus: function () {
+            this.$server.post('api/user/post/status', {
+                body: this.status,
+                tags: this.tags
             }).then((resp) => {
                 if (resp.data.status === 'SUCCESS') {
-                    this.$store.dispatch('onSuccessLogin', resp.data.message.user);
+                    this.status = null;
+                    this.tags = null;
 
                     this.snackbar = true;
-                    this.snackbarText = 'Welcome back to Mimosa! Redirecting in 3s..';
+                    this.snackbarText = 'Status post successful, redirecting to home in 3s...';
 
                     setTimeout(() => { this.$router.push('/') }, 3000);
                 } else if (resp.data.status === 'REJECTED') {
                     this.snackbar = true;
-                    this.snackbarText = 'Invalid credentials';
+                    this.snackbarText = 'Post reject, please check your form';
                     this.loginBtnDisabled = false;
                 } else {
                     this.snackbar = true;
