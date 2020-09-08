@@ -42,10 +42,7 @@
             <v-speed-dial
                 v-model="fab"
                 :bottom="true"
-                :right="true"
-                :direction="direction"
-                :open-on-hover="hover"
-                :transition="transition">
+                :right="true">
 
                 <template v-slot:activator>
                     <v-btn
@@ -72,7 +69,8 @@
                     fab
                     dark
                     small
-                    color="indigo">
+                    color="indigo"
+                    @click="$router.push('/photo')">
                     <v-icon>mdi-image</v-icon>
                 </v-btn>
 
@@ -121,7 +119,8 @@
             drawer: null,
             snackbarTimeout: 2000,
             snackbar: false,
-            snackbarText: ''
+            snackbarText: '',
+            fab: false,
         }),
         created () {
             this.$server.get('sanctum/csrf-cookie');

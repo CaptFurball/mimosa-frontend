@@ -10,13 +10,16 @@
                             required>
                         </v-text-field>
 
+                        <v-file-input @change="setPhoto" @clear="clearPhoto()" label="Photo"></v-file-input>
+                        <small>Please make sure image size is less than 1mb</small>
+
                         <v-text-field
                             v-model="tags"
                             label="Tags (Comma seperate eg: 'startup,vimigo')"
                             required>
                         </v-text-field>
 
-                        <v-btn block :disabled="!status" v-on:click="postStatus()">
+                        <v-btn block :disabled="!status || !photo" v-on:click="postStatus()">
                             Post
                         </v-btn>
                     </v-form>
@@ -46,23 +49,35 @@
 export default {
     data: () => ({
         status: null,
+        photo: null,
         tags: null,
         snackbarTimeout: 2000,
         snackbar: false,
         snackbarText: ''
     }),
     methods: {
+        setPhoto(file) {
+            this.photo = file;
+        },
+        clearPhoto() {
+            this.photo = null;
+        },
         postStatus: function () {
-            this.$server.post('api/user/post/status', {
-                body: this.status,
-                tags: this.tags
+
+            let formData = new FormData();
+            formData.append('body', this.status);
+            formData.append('photo', this.photo);
+            formData.append('tags', this.tags);
+
+            this.$server.post('api/user/post/photo', formData, {
+                headers: {'Content-Type': 'multipart/form-data'}
             }).then((resp) => {
                 if (resp.data.status === 'SUCCESS') {
                     this.status = null;
                     this.tags = null;
 
                     this.snackbar = true;
-                    this.snackbarText = 'Status post successful, redirecting to home in 3s...';
+                    this.snackbarText = 'Photo post successful, redirecting to home in 3s...';
 
                     setTimeout(() => { this.$router.push('/') }, 3000);
                 } else if (resp.data.status === 'REJECTED') {
