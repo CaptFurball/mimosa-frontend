@@ -49,67 +49,73 @@
                 <v-icon>mdi-account</v-icon>
             </v-btn>
 
-            <v-btn v-if="$store.state.authenticated" @click="$router.push('/user/' + $store.state.user.id)">{{ $store.state.user.name }}</v-btn>
+            <v-btn text 
+                v-if="$store.state.authenticated" 
+                @click="$router.push('/user/' + $store.state.user.id)">
+                {{ $store.state.user.name }}
+            </v-btn>
         </v-app-bar>
 
         <v-main>
-            <router-view></router-view>
+            <router-view :key="$route.path"></router-view>
         </v-main>
 
         <v-footer color="indigo" app>
-            <v-speed-dial
-                v-model="fab"
-                :bottom="true"
-                :right="true">
-
-                <template v-slot:activator>
-                    <v-btn
+            <v-row justify="end">
+                <v-speed-dial
                     v-model="fab"
-                    color="blue darken-2"
-                    dark
-                    fab
-                    >
-                    <v-icon v-if="fab">mdi-close</v-icon>
-                    <v-icon v-else>mdi-plus</v-icon>
+                    :bottom="true"
+                    :right="true">
+
+                    <template v-slot:activator>
+                        <v-btn
+                        v-model="fab"
+                        color="blue darken-2"
+                        dark
+                        fab
+                        >
+                        <v-icon v-if="fab">mdi-close</v-icon>
+                        <v-icon v-else>mdi-plus</v-icon>
+                        </v-btn>
+                    </template>
+                    
+                    <v-btn
+                        fab
+                        dark
+                        small
+                        color="green"
+                        @click="$router.push('/status')">
+                        <v-icon>mdi-pencil</v-icon>
                     </v-btn>
-                </template>
-                
-                <v-btn
-                    fab
-                    dark
-                    small
-                    color="green"
-                    @click="$router.push('/status')">
-                    <v-icon>mdi-pencil</v-icon>
-                </v-btn>
 
-                <v-btn
-                    fab
-                    dark
-                    small
-                    color="indigo"
-                    @click="$router.push('/photo')">
-                    <v-icon>mdi-image</v-icon>
-                </v-btn>
+                    <v-btn
+                        fab
+                        dark
+                        small
+                        color="indigo"
+                        @click="$router.push('/photo')">
+                        <v-icon>mdi-image</v-icon>
+                    </v-btn>
 
-                <v-btn
-                    fab
-                    dark
-                    small
-                    color="orange"
-                    @click="$router.push('/video')">
-                    <v-icon>mdi-video</v-icon>
-                </v-btn>
+                    <v-btn
+                        fab
+                        dark
+                        small
+                        color="orange"
+                        @click="$router.push('/video')">
+                        <v-icon>mdi-video</v-icon>
+                    </v-btn>
 
-                <v-btn
-                    fab
-                    dark
-                    small
-                    color="pink"
-                    @click="$router.push('/link')">
-                    <v-icon>mdi-link</v-icon>
-                </v-btn>
-            </v-speed-dial>
+                    <v-btn
+                        fab
+                        dark
+                        small
+                        color="pink"
+                        @click="$router.push('/link')">
+                        <v-icon>mdi-link</v-icon>
+                    </v-btn>
+                </v-speed-dial>
+            </v-row>
         </v-footer>
 
         <v-snackbar
@@ -131,37 +137,37 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            source: String,
-        },
-        data: () => ({
-            drawer: null,
-            snackbarTimeout: 2000,
-            snackbar: false,
-            snackbarText: '',
-            fab: false,
-        }),
-        created () {
-            this.$server.get('sanctum/csrf-cookie');
+export default {
+    props: {
+        source: String,
+    },
+    data: () => ({
+        drawer: null,
+        snackbarTimeout: 2000,
+        snackbar: false,
+        snackbarText: '',
+        fab: false,
+    }),
+    created () {
+        this.$server.get('sanctum/csrf-cookie');
 
-            this.$server.get('api/user').then((resp) => {
-                if (resp.data.status === 'SUCCESS') {
-                    this.$store.dispatch('onSuccessLogin', resp.data.message.user);
-                } else {
-                    this.$store.dispatch('onLogout');
-                    this.$router.push('/');
-                    this.snackbarText = 'You have logged out';
-                    this.snackbar = true;
-                }
-            });
-        },
-        methods: {
-            logout () {
-                this.$server.get('logout').then(() => {
-                    this.$store.dispatch('onLogout');
-                });
+        this.$server.get('api/user').then((resp) => {
+            if (resp.data.status === 'SUCCESS') {
+                this.$store.dispatch('onSuccessLogin', resp.data.message.user);
+            } else {
+                this.$store.dispatch('onLogout');
+                this.$router.push('/');
+                this.snackbarText = 'You have logged out';
+                this.snackbar = true;
             }
+        });
+    },
+    methods: {
+        logout () {
+            this.$server.get('logout').then(() => {
+                this.$store.dispatch('onLogout');
+            });
         }
     }
+}
 </script>

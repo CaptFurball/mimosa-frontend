@@ -17,6 +17,13 @@ Vue.prototype.$server = axios.create({
 
 import store from './store';
 
+import VueLodash from 'vue-lodash';
+import lodash from 'lodash';
+
+Vue.use(VueLodash, { 
+  lodash: lodash 
+});
+
 new Vue({
   vuetify,
   router,

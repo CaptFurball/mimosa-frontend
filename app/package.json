@@ -12,7 +12,9 @@
   "dependencies": {
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "lodash": "^4.17.20",
     "vue": "^2.6.11",
+    "vue-lodash": "^2.1.2",
     "vue-router": "^3.4.3",
     "vuetify": "^2.2.11",
     "vuex": "^3.5.1"
