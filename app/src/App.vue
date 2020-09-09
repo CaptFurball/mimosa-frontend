@@ -49,7 +49,11 @@
                 <v-icon>mdi-account</v-icon>
             </v-btn>
 
-            <v-btn v-if="$store.state.authenticated" @click="$router.push('/user/' + $store.state.user.id)">{{ $store.state.user.name }}</v-btn>
+            <v-btn text 
+                v-if="$store.state.authenticated" 
+                @click="$router.push('/user/' + $store.state.user.id)">
+                {{ $store.state.user.name }}
+            </v-btn>
         </v-app-bar>
 
         <v-main>
@@ -131,37 +135,37 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            source: String,
-        },
-        data: () => ({
-            drawer: null,
-            snackbarTimeout: 2000,
-            snackbar: false,
-            snackbarText: '',
-            fab: false,
-        }),
-        created () {
-            this.$server.get('sanctum/csrf-cookie');
+export default {
+    props: {
+        source: String,
+    },
+    data: () => ({
+        drawer: null,
+        snackbarTimeout: 2000,
+        snackbar: false,
+        snackbarText: '',
+        fab: false,
+    }),
+    created () {
+        this.$server.get('sanctum/csrf-cookie');
 
-            this.$server.get('api/user').then((resp) => {
-                if (resp.data.status === 'SUCCESS') {
-                    this.$store.dispatch('onSuccessLogin', resp.data.message.user);
-                } else {
-                    this.$store.dispatch('onLogout');
-                    this.$router.push('/');
-                    this.snackbarText = 'You have logged out';
-                    this.snackbar = true;
-                }
-            });
-        },
-        methods: {
-            logout () {
-                this.$server.get('logout').then(() => {
-                    this.$store.dispatch('onLogout');
-                });
+        this.$server.get('api/user').then((resp) => {
+            if (resp.data.status === 'SUCCESS') {
+                this.$store.dispatch('onSuccessLogin', resp.data.message.user);
+            } else {
+                this.$store.dispatch('onLogout');
+                this.$router.push('/');
+                this.snackbarText = 'You have logged out';
+                this.snackbar = true;
             }
+        });
+    },
+    methods: {
+        logout () {
+            this.$server.get('logout').then(() => {
+                this.$store.dispatch('onLogout');
+            });
         }
     }
+}
 </script>
