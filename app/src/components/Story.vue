@@ -127,7 +127,9 @@
                     <span class="mr-1">·</span>
 
                     <!-- Share button -->
-                    <v-icon class="mr-1">mdi-share-variant</v-icon>
+                    <v-btn v-if="!content.shared_story" icon @click="onShare(content.id)">
+                        <v-icon class="mr-1">mdi-share-variant</v-icon>
+                    </v-btn>
                 </v-row>
             </v-list-item>
         </v-card-actions>
@@ -229,6 +231,20 @@ export default {
                     if (resp.data.status === 'SUCCESS') {
                         this.$emit('onDelete', storyId);
                         this.$refs.notify.show('Post deleted!');
+                    }  else {
+                        this.$refs.notify.unabledToPerformMessage();
+                    }
+                });
+            }
+        },
+        onShare(storyId) {
+            if (confirm("Confirm share this story on your wall?")) {
+                this.$server.post('api/user/post/share', {
+                    storyId: storyId
+                }).then((resp) => {
+                    if (resp.data.status === 'SUCCESS') {
+                        this.$refs.notify.show('Post shared on your wall! Redirecting you to the post');
+                        setTimeout(() => { this.$router.push('/user/' + this.$store.state.user.id) }, 3000);
                     }  else {
                         this.$refs.notify.unabledToPerformMessage();
                     }
