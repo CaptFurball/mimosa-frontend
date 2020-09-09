@@ -61,7 +61,7 @@
                     </div>
 
                     <v-card-actions>
-                        <v-list-item class="grow">
+                        <v-list-item>
                             <v-list-item-avatar color="grey darken-3">
                                 <v-img
                                     class="elevation-6"
@@ -70,7 +70,10 @@
                             </v-list-item-avatar>
 
                             <v-list-item-content>
-                                <v-list-item-title @click="$router.push('/user/' + story.user.id)">{{ story.user.name }}</v-list-item-title>
+                                <v-list-item-title>
+                                    <v-btn link  @click="$router.push('/user/' + story.user.id)">{{ story.user.name }}</v-btn>
+                                    <v-btn icon @click="followingUser(story.user.id)"><v-icon>mdi-plus</v-icon></v-btn>
+                                </v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                     </v-card-actions>
@@ -254,6 +257,18 @@ export default {
                 } else {
                     this.snackbar = true;
                     this.snackbarText = 'Can\'t delete now, please try again later';
+                }
+            })
+        },
+        followingUser(userId) {
+            this.$server.post('api/user/follow/' + userId).then((resp) => {
+                if (resp.data.status === 'SUCCESS') {
+                    this.fetchStories();
+                    this.snackbar = true;
+                    this.snackbarText = 'You have followed this person';
+                } else {
+                    this.snackbar = true;
+                    this.snackbarText = 'Can\'t follow now, please try again later';
                 }
             })
         }
