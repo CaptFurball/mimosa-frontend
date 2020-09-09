@@ -49,7 +49,7 @@
                 <v-icon>mdi-account</v-icon>
             </v-btn>
 
-            <div v-if="$store.state.authenticated">{{ $store.state.user.name }}</div>
+            <v-btn v-if="$store.state.authenticated" @click="$router.push('/user/' + $store.state.user.id)">{{ $store.state.user.name }}</v-btn>
         </v-app-bar>
 
         <v-main>
