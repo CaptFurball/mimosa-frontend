@@ -57,63 +57,65 @@
         </v-app-bar>
 
         <v-main>
-            <router-view></router-view>
+            <router-view :key="$route.path"></router-view>
         </v-main>
 
         <v-footer color="indigo" app>
-            <v-speed-dial
-                v-model="fab"
-                :bottom="true"
-                :right="true">
-
-                <template v-slot:activator>
-                    <v-btn
+            <v-row justify="end">
+                <v-speed-dial
                     v-model="fab"
-                    color="blue darken-2"
-                    dark
-                    fab
-                    >
-                    <v-icon v-if="fab">mdi-close</v-icon>
-                    <v-icon v-else>mdi-plus</v-icon>
+                    :bottom="true"
+                    :right="true">
+
+                    <template v-slot:activator>
+                        <v-btn
+                        v-model="fab"
+                        color="blue darken-2"
+                        dark
+                        fab
+                        >
+                        <v-icon v-if="fab">mdi-close</v-icon>
+                        <v-icon v-else>mdi-plus</v-icon>
+                        </v-btn>
+                    </template>
+                    
+                    <v-btn
+                        fab
+                        dark
+                        small
+                        color="green"
+                        @click="$router.push('/status')">
+                        <v-icon>mdi-pencil</v-icon>
                     </v-btn>
-                </template>
-                
-                <v-btn
-                    fab
-                    dark
-                    small
-                    color="green"
-                    @click="$router.push('/status')">
-                    <v-icon>mdi-pencil</v-icon>
-                </v-btn>
 
-                <v-btn
-                    fab
-                    dark
-                    small
-                    color="indigo"
-                    @click="$router.push('/photo')">
-                    <v-icon>mdi-image</v-icon>
-                </v-btn>
+                    <v-btn
+                        fab
+                        dark
+                        small
+                        color="indigo"
+                        @click="$router.push('/photo')">
+                        <v-icon>mdi-image</v-icon>
+                    </v-btn>
 
-                <v-btn
-                    fab
-                    dark
-                    small
-                    color="orange"
-                    @click="$router.push('/video')">
-                    <v-icon>mdi-video</v-icon>
-                </v-btn>
+                    <v-btn
+                        fab
+                        dark
+                        small
+                        color="orange"
+                        @click="$router.push('/video')">
+                        <v-icon>mdi-video</v-icon>
+                    </v-btn>
 
-                <v-btn
-                    fab
-                    dark
-                    small
-                    color="pink"
-                    @click="$router.push('/link')">
-                    <v-icon>mdi-link</v-icon>
-                </v-btn>
-            </v-speed-dial>
+                    <v-btn
+                        fab
+                        dark
+                        small
+                        color="pink"
+                        @click="$router.push('/link')">
+                        <v-icon>mdi-link</v-icon>
+                    </v-btn>
+                </v-speed-dial>
+            </v-row>
         </v-footer>
 
         <v-snackbar

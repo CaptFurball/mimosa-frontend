@@ -23,33 +23,21 @@
                 </v-col>
             </v-row>
            
-            <v-snackbar
-                v-model="snackbar"
-                :timeout="snackbarTimeout">
-                {{ snackbarText }}
-
-                <template v-slot:action="{ attrs }">
-                    <v-btn
-                        color="blue"
-                        text
-                        v-bind="attrs"
-                        @click="snackbar = false">
-                        Close
-                    </v-btn>
-                </template>
-            </v-snackbar>
+            <notification ref="notify"></notification>
         </v-container>
     </div>
 </template>
 
 <script>
+import Notification from '../Notification';
+
 export default {
+    components: {
+        'notification': Notification
+    },
     data: () => ({
         status: null,
         tags: null,
-        snackbarTimeout: 2000,
-        snackbar: false,
-        snackbarText: ''
     }),
     methods: {
         postStatus: function () {
@@ -61,22 +49,18 @@ export default {
                     this.status = null;
                     this.tags = null;
 
-                    this.snackbar = true;
-                    this.snackbarText = 'Status post successful, redirecting to home in 3s...';
+                    this.$refs.notify.show('Story posted!');
 
-                    setTimeout(() => { this.$router.push('/') }, 3000);
+                    setTimeout(() => { this.$router.push('/user/' + this.$store.state.user.id) }, 3000);
                 } else if (resp.data.status === 'REJECTED') {
-                    this.snackbar = true;
-                    this.snackbarText = 'Post reject, please check your form';
+                    this.$refs.notify.show('Your post was reject, please check your form again');
                     this.loginBtnDisabled = false;
                 } else {
-                    this.snackbar = true;
-                    this.snackbarText = 'Server error';
+                    this.$refs.notify.unabledToPerformMessage();
                     this.loginBtnDisabled = false;
                 }
             }).catch(() => {
-                this.snackbar = true;
-                this.snackbarText = 'Server error';
+                this.$refs.notify.unabledToPerformMessage();
             });
         }
     }

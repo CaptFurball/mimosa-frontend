@@ -9,6 +9,39 @@
             </span>
         </v-card-text>
 
+        <!-- Shared Story -->
+        <div v-if="!!content.shared_story">
+            <v-card-text class="headline font-weight-bold">
+                <i>
+                    <div><a @click="$router.push('/user/' + content.shared_story.story.user.id)">{{ content.shared_story.story.user.name }}</a> says</div> 
+                    <div>"{{ content.shared_story.story.body }}"</div> 
+                </i>
+            </v-card-text>
+
+            <!-- Photo content -->
+            <div v-if="!!content.shared_story.story.photo">
+                <v-img :src="storageUrl + content.shared_story.story.photo.path" height="200px"></v-img>
+            </div>
+
+            <!-- Link content -->
+            <div v-if="!!content.shared_story.story.link">
+                <v-img v-if="content.shared_story.story.link.image_url" :src="content.shared_story.story.link.image_url" height="200px"></v-img>
+
+                <v-card-text class="headline">
+                    <a :href="content.shared_story.story.link.url">{{ content.shared_story.story.link.title? content.shared_story.story.link.title: content.shared_story.story.link.url }}</a>
+                </v-card-text>
+                <v-card-text v-if="content.shared_story.story.link.description">{{ content.shared_story.story.link.description }}</v-card-text>
+            </div>
+
+            <!-- Video content -->
+            <div v-if="!!content.shared_story.story.video">
+                <video width="100%" height="240" controls>
+                    <source :src="storageUrl + content.shared_story.story.video.path">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+
         <!-- Photo content -->
         <div v-if="!!content.photo">
             <v-img :src="storageUrl + content.photo.path" height="200px"></v-img>
@@ -94,7 +127,9 @@
                     <span class="mr-1">·</span>
 
                     <!-- Share button -->
-                    <v-icon class="mr-1">mdi-share-variant</v-icon>
+                    <v-btn v-if="!content.shared_story" icon @click="onShare(content.id)">
+                        <v-icon class="mr-1">mdi-share-variant</v-icon>
+                    </v-btn>
                 </v-row>
             </v-list-item>
         </v-card-actions>
@@ -196,6 +231,20 @@ export default {
                     if (resp.data.status === 'SUCCESS') {
                         this.$emit('onDelete', storyId);
                         this.$refs.notify.show('Post deleted!');
+                    }  else {
+                        this.$refs.notify.unabledToPerformMessage();
+                    }
+                });
+            }
+        },
+        onShare(storyId) {
+            if (confirm("Confirm share this story on your wall?")) {
+                this.$server.post('api/user/post/share', {
+                    storyId: storyId
+                }).then((resp) => {
+                    if (resp.data.status === 'SUCCESS') {
+                        this.$refs.notify.show('Post shared on your wall! Redirecting you to the post');
+                        setTimeout(() => { this.$router.push('/user/' + this.$store.state.user.id) }, 3000);
                     }  else {
                         this.$refs.notify.unabledToPerformMessage();
                     }
