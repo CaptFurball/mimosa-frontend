@@ -9,6 +9,39 @@
             </span>
         </v-card-text>
 
+        <!-- Shared Story -->
+        <div v-if="!!content.shared_story">
+            <v-card-text class="headline font-weight-bold">
+                <i>
+                    <div><a @click="$router.push('/user/' + content.shared_story.story.user.id)">{{ content.shared_story.story.user.name }}</a> says</div> 
+                    <div>"{{ content.shared_story.story.body }}"</div> 
+                </i>
+            </v-card-text>
+
+            <!-- Photo content -->
+            <div v-if="!!content.shared_story.story.photo">
+                <v-img :src="storageUrl + content.shared_story.story.photo.path" height="200px"></v-img>
+            </div>
+
+            <!-- Link content -->
+            <div v-if="!!content.shared_story.story.link">
+                <v-img v-if="content.shared_story.story.link.image_url" :src="content.shared_story.story.link.image_url" height="200px"></v-img>
+
+                <v-card-text class="headline">
+                    <a :href="content.shared_story.story.link.url">{{ content.shared_story.story.link.title? content.shared_story.story.link.title: content.shared_story.story.link.url }}</a>
+                </v-card-text>
+                <v-card-text v-if="content.shared_story.story.link.description">{{ content.shared_story.story.link.description }}</v-card-text>
+            </div>
+
+            <!-- Video content -->
+            <div v-if="!!content.shared_story.story.video">
+                <video width="100%" height="240" controls>
+                    <source :src="storageUrl + content.shared_story.story.video.path">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+
         <!-- Photo content -->
         <div v-if="!!content.photo">
             <v-img :src="storageUrl + content.photo.path" height="200px"></v-img>
